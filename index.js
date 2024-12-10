@@ -172,3 +172,95 @@ function drawEnemies() {
   })
 }
 
+function drawCharacter() {
+  if (character.alive && !youWin) {
+    if (character.attacking) {
+      character.spriteX = character.attackSprite * character.height;
+      character.spriteY = character.direction * chracter.height;
+      context.drawImage(sprites.characterAttack, character.spriteX, character.spriteY, character.attackWidth, character.attackHeight, character.positionX - 50, character.positionY, character.attackWidth, character.attackHeight);
+    } else {
+      character.spriteX = character.currentSprite * character.width;
+      character.spriteY = character.direction * character.height;
+      context.drawImage(sprites.characterMovement, character.spriteX, character.spriteY, character.width, character.height, character.positionX, character.positionY, character.width, character.height);
+    }
+
+    if (character.moving) {
+      if (framesByImage == 0) {
+        character.currentSprite++;
+        framesByImage = 5;
+      } else {
+        framesByImage--;
+      }
+      if (character.currentSprite >= 3 && framesByImage == 0) {
+        character.currentSprite = 0;
+        framesByImage = 5;
+      }
+    } else {
+      character.currentSprite = 0;
+    }
+
+    if (character.attacking) {
+      if (attackFramesByImage == 0) {
+        character.attackSprite++;
+        attackFramesByImage = 3;
+      } else {
+        attackFramesByImage--;
+      }
+      if (character.attackSprite >= 3 && attackFramesByImage == 0) {
+        character.attackSprite = 0;
+        attackFramesByImage = 3;
+        character.attackPressed = false;
+      }
+    } else {
+      character.attackSprite = 0;
+    }
+  } else {
+    context.drawImage(sprites.gameOver, 0, 0, sprites.gameOver.width, sprites.gameOver.height, canvas.width/2 - sprites.gameOver.width/2, canvas.height/2 - sprites.gameOver.height/2, sprites.gameOver.width, sprites.gameOver.height);
+  }
+  if (youWin) {
+    context.drawImage(sprites.youWin, 0, 0, sprites.youWin.width, sprites.youWin.height, canvas.width/2 - sprites.youWin.width/2, canvas.height/2 - sprites.youWin.height/2, sprites.youWin.width, sprites.youWin.height);
+  }
+}
+
+function draw() {
+  clearCanvas();
+  context.beginPath();
+  drawContent();
+  drawEnemies();
+  drawCharacter();
+}
+
+
+function generateEnemies(map) {
+  var x = 0;
+  var y = 0;
+  var thisMap = currentMap.split(',');
+  if (thisMap[0] == 0) thisMap[0] = 1;
+  if (thisMap[1] == 0) thisMap[1] = 1;
+  distanceFromCenter = Math.abs(parseInt(thisMap[0])) + Math.abs(parseInt(thisMap[1]));
+  if (distanceFromCenter > 50) distanceFromCenter = 50;
+  enemyPossibility = 1000 - distanceFromCenter * 2
+  for (x = 0; x < canvas.width / 192 x++) {
+    for (y = 0; y < canvas.height / 108; y++) {
+      randomNumber = Math.floor(Math.random() * 1000);
+      if (randomNumber > enemyPossibility) {
+        map[x][y] = {
+          positionX: x * 192, 
+          positionY: y * 108,
+          speed: Math.floor(Math.random() * 2) + 1,
+          alive: true
+        };
+      }
+    }
+  }
+  return map;
+}
+
+function clearCanvas() {
+  canvas.width = canvas.width;
+}
+
+
+
+
+
