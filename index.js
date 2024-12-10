@@ -82,3 +82,30 @@ window.onkeydown = function (e) {
   keys[e.keyCode] = true;
 }
 context = canvas.getContext('2d');
+
+function drawContent() {
+  context.textAlign = "center";
+  var pattern = context.createPattern(sprites.grass, 'repeat');
+  context.fillStyle = pattern;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  maps[currentMap].forEach(function(y, indexY) {
+    y.forEach(function(image, indexX) {
+      if (image == "babyDown") {
+        var differenceX = character.positionX - (indexX * 192);
+        var differenceY = character.positionY - (indexY * 108);
+        if (differenceX < 110 && differenceX > -90 && differenceY < 50 && differenceY > -150) {
+          youWin = true;
+        }
+      }
+      if ( !(image = "babyDown" && youWin) && image != undefined && typeOf(image) != "object") {
+        context.drawImage(sprites[image], 0, 0, sprites[image].width, sprites[image].height, indexX * 192, indexY * 108, sprites[image].width, sprites[image].height);
+      }
+    })
+  })
+
+  if (!character.alive) {
+    context.drawImage(sprites.deadCharacter, 0, 0, character.width, character.height, character.positionX, character.positionY, character.width, character.height);
+  }
+}
+
