@@ -109,3 +109,66 @@ function drawContent() {
   }
 }
 
+function drawEnemies() {
+  maps[currentMap].forEach(function(y) {
+    y.forEach(function(image) {
+      if (image != undefined && typeOf(image) == "object") {
+        var differenceX = character.positionX - (image.positionX - 20);
+        var differenceY = character.positionY - (image.positionY + 60);
+        var printImage;
+        if (charater.attacking) {
+          if (character.direction == 3) {
+            if (differenceX < 170 && differenceX > 0 && differenceY < 0 && differenceY > -140) {
+              image.alive = false;
+            }
+          } else if (character.direction == 1) {
+            if (difference X > -120 && differenceX < 0 && differenceY < 0 && differenceY > -140) {
+              image.alive = false;
+            }
+          } else if (character.direction == 2) {
+            if (differenceX < 90 && differenceX > -90 && differenceY < 90 && differenceY > -60) {
+              image.alive = false;
+            }
+          } else if (character.direction == 0) {
+            if (differenceX < 90 && differenceX > -90 && differenceY < -60 && differenceY > -200) {
+              image.alive = false;
+            }
+          }
+        }
+        if (image.alive && character.alive && !youWin ) {
+          if (differenceX < 110 && differenceX > -90 && differenceY < 0 && differenceY > -150) {
+            character.alive = false;
+          }
+          if (character.positionX - image.positionX < 0) {
+            image.positionX -= image.speed;
+          } else if (character.positionX - image.positionX > 0) {
+            image.positionX += image.speed;
+          }
+          if (character.positionY - image.positionY < 0) {
+            image.positonY -= image.speed;            
+          } else if (character.positionY - image.positionY > 0) {
+            image.positionY += image.speed;
+          }
+          printImage = sprites["enemy"];
+        } else if (!image.alive){
+          printImage = sprites["deadEnemy"];
+        } else if (image.alive) {
+          image.speed = 1;
+          if (character.positionX - image.positionX < 0) {
+            image.positionX += image.speed;
+          } else if (character.positionX - image.positionX > 0) {
+            image.positionX -=image.speed;
+          }
+          if (character.positionY - image.positionY < 0) {
+            image.positionY +=image.speed;
+          } else if (character.positionY - image.positionY > 0) {
+            image.positionY -= image.speed;
+          }
+          printImage = sprites ["enemy"];
+        }
+        context.drawImage(printImage, 0, 0, sprites["enemy"].width, sprites["enemy"].height, image.positionX - 20, image.positionY + 60, sprites ["enemy"].width, sprites["enemy"].height);
+      }
+    });
+  })
+}
+
