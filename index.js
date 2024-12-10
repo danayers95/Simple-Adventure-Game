@@ -38,3 +38,47 @@ var character = {
   attackPressed: false,
   alive: true
 }
+
+var sprites = {
+  characterMovement: new Image(),
+  characterAttack: new Image(),
+  babyDown: new Image(),
+  skull: new Image(),
+  rock2: new Image(),
+  flowers2: new Image(),
+  flowers: new Image(),
+  rock: new Image(),
+  groundLog: new Image(),
+  grass: new Image(),
+  enemy: new Image(),
+  deadEnemy: new Image(),
+  deadCharacter: new Image(),
+  gameOver: new Image(),
+  youWin: new Image(),
+}
+
+for (spriteName in sprites) {
+  sprites[spriteName].src = "sprites/" + spriteName + ".png";
+}
+
+function restart() {
+  mapChanged = false;
+  youWin = false;
+  maps = {
+    "0,0": undefined
+  }
+  currentMap = "0,0";
+  character.alive = true;
+  character.positionX = canvas.width/2;
+  character.direction = 0;
+  mapGenerate();
+}
+
+window.onkeyup = function (e) {
+  if (e.keyCode == keyCode.r) restart();
+  keys[e.keyCode] = false;
+}
+window.onkeydown = function (e) {
+  keys[e.keyCode] = true;
+}
+context = canvas.getContext('2d');
