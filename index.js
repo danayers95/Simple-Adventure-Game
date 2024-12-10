@@ -261,6 +261,78 @@ function clearCanvas() {
 }
 
 
+function mapGenerate() {
+  var x = 0;
+  var y = 0;
+  var map = [];
+  for (x = 0; x < canvas.width / 192; x++) {
+    map[x] = [];
+    for (y = 0; y < canvas.height / 108; y++) {
+      var randomNumber = Math.floor(Math.random() * 10000);
+      if (randomNumber > 9997) {
+        map[x][y] = "babyDown";
+      } else if (randomNumber > 9900) {
+        map[x][y] = "skull";
+      } else if (randomNumber > 9800) {
+        map[x][y] = "rock2";
+      } else if (randomNumber > 9700) {
+        map[x][y] = "flowers2";
+      } else if (randomNumber > 8500) {
+        map[x][y] = "flowers";
+      } else if (randomNumber > 8000) {
+        map[x][y] = "rock";
+      } else if (randomNumber > 7750) {
+        map[x][y] = "groundLog";
+      } else {
+        map[x][y] = undefined;
+      }
+    }
+  }
+  map = generateEnemies(map);
+  maps[currentMap] = map;
+  mapChanged = false;
+}
+
+function characterAttack() {
+  if (keys[keyCode.space]) {
+    character.attacking = true;
+    character.attackPressed = true;
+  } else if (character.attackSprite == 0 && character.attackPressed == false) {
+    character.attacking = false;
+  }
+}
+
+function characterControls() {
+  var directionX = 0
+  var directionY = 0
+  if (keys[keyCode.left]) {
+    directionX += character.moveSpeed;
+    character.direction = 3;
+  }
+  if (keys[keyCode.right]) {
+    directionX += character.moveSpeed;
+    character.direction = 1;
+  }
+  if (keys[keyCode.up]) {
+    directionY += character.moveSpeed;
+    character.direction = 2;
+  }
+  if (keys[keyCode.down]) {
+    directionY += character.moveSpeed;
+    character.direction = 0;
+  }
+  if (directionX ==0 && directionY == 0) {
+    character.moving = false;
+  } else {
+    character.moving = true;
+  }
+  character.positionX += directionX;
+  character.positionY += directionY;
+}
+
+
+
+
 
 
 
