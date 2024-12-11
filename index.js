@@ -330,6 +330,85 @@ function characterControls() {
   character.positionY += directionY;
 }
 
+function characterMove() {
+    var thisMap = currentMap.split(',');
+    if (character.positionX < 0) {
+        character.positionX = canvas.width - character.width;
+        thisMap = [ parseInt(thisMap[0]) - 1 , thisMap[1]];
+        mapChanged = true;
+    } else if (character.positionX > canvas.width - character.width) {
+        character.positionX = 0;
+        thisMap = [ parseInt(thisMap[0]) + 1, thisMap[1]];
+        mapChanged = true;
+    } else if (character.positionY < 0) {
+        character.positionY = canvas.height - character.height;
+        thisMap = [thisMap[0], parseInt(thisMap[1]) - 1];
+        mapChanged = true;
+    } else if (character.positionY > canvas.height - character.height) {
+        character.positionY = 0;
+        thisMap = [thisMap[0], parseInt(thisMap[1]) + 1];
+        mapChanged = true;
+    }
+    currentMap = thisMap[0] + "," + thisMap[1];
+}
+
+function load() {
+  var gameState = JSON.parse(window.localStorage.getItem('gameState'));
+  if ( gameState != undefined) {
+    character. = gameState.character;
+    maps = gameState.maps;
+    currentMap = gameState.currentMap;
+    youWin = gameState.youWin;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function save() {
+  var gameState = {
+    character: character,
+    maps: maps,
+    currentMap: currentMap, 
+    youWin: youWin,
+  }
+
+  window.localStorage.setItem('gameState', JSON.stringify(gameState));
+  saved = true;
+}
+
+
+function main() {
+  if (character.alive && !youWin) {
+    characterAttack();
+    if (!character.attacking) {
+      characterControls();
+    }
+    characterMove();
+  }
+  if (mapChanged) {
+    if (maps[currentMap] == undefined) {
+      mapGenerate();
+    }
+  }
+
+  var pressingButton = false;
+
+  for (key in keys) {
+    if (keys[key] == true) pressingButton = true;
+  }
+  if (!pressingButton && saved == false) {
+    save();
+  } else if (pressingButton) {
+    saved = false;
+  }
+  draw();
+}
+
+loaded = load();
+if (!loaded) mapGenerate();
+draw();
+setInterval(main, 17);
 
 
 
